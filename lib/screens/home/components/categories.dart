@@ -3,16 +3,79 @@ import 'package:ecommerce_flutter/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ecommerce_flutter/constants.dart';
+import 'package:provider/provider.dart';
 
-import '../../details/details_screen.dart';
-import 'item_card.dart';
 import 'item_category.dart';
 
-class CategoriesScreen extends StatelessWidget {
+import 'dart:convert';
+import 'package:http/http.dart' as http; 
+
+class CategoriesScreen extends StatefulWidget {
+  @override
+  _CategoriesScreenState createState() => _CategoriesScreenState();
+}
+
+  class _CategoriesScreenState extends State<CategoriesScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+  const apiUrl = 'https://moviles2-jase-default-rtdb.firebaseio.com/categories.json';
+
+  final response = await http.get(Uri.parse(apiUrl));
+  final data = json.decode(response.body);
+
+  List<Category> fetchedCategories = [];
+
+  for (var categoryData in data) {
+    // List<Product> categoryProducts = [];
+    // for (var productData in categoryData['products']) {
+    //   List<Color> productColors = [];
+    //   for (var color in productData['colors']) {
+    //     productColors.add(Color(int.parse(color.substring(1), radix: 16)));
+    //   }
+
+    //   Product product = Product(
+    //     id: productData['id'],
+    //     title: productData['title'],
+    //     price: productData['price'],
+    //     size: productData['size'],
+    //     description: productData['description'],
+    //     image: productData['image'],
+    //     colors: productColors,
+    //   );
+
+    //   categoryProducts.add(product);
+    // }
+
+    Category category = Category(
+      title: categoryData['title'],
+      image: categoryData['image'],
+      //products: categoryProducts,
+    );
+
+    fetchedCategories.add(category);
+  }
+
+  // Now, you can assign the fetched data to your existing 'categories' list.
+  
+  final dataProvider = Provider.of<CategoriesProvider>(context, listen: false);
+  dataProvider.updateCategories(fetchedCategories);
+  
+}
+
+
   @override
   Widget build(BuildContext context) {
+    
+    final dataProvider = Provider.of<CategoriesProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white70,
         elevation: 0,
         title: Text(
@@ -42,24 +105,22 @@ class CategoriesScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
-              child: GridView.builder(
-                itemCount: categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: kDefaultPaddin,
-                  crossAxisSpacing: kDefaultPaddin,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (context, index) => ItemCategory(
-                  category: categories[index],
-                  press: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(
-                        category: categories[index],
-                      ),
+            child: GridView.builder(
+              itemCount: dataProvider.categories.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: kDefaultPaddin,
+                crossAxisSpacing: kDefaultPaddin,
+                childAspectRatio: 1,
+              ),
+              itemBuilder: (context, index) => ItemCategory(
+                category: dataProvider.categories[index],
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      categoryId: index,
+                      category: dataProvider.categories[index]
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:ecommerce_flutter/screens/details/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_flutter/models/Product.dart';
 
@@ -7,8 +8,14 @@ class ColorAndSize extends StatelessWidget {
   const ColorAndSize({super.key, required this.product});
 
   final Product product;
+
   @override
   Widget build(BuildContext context) {
+    // Define a list of colors
+    List<Color> colors = [Color(0xFF7C4141), Color(0xFF41627C), Color(0xFF7C7C41)];
+    List<String> paths = [];
+    for (var i in product.colors)
+      paths.add(i);
     return Row(
       children: <Widget>[
         Expanded(
@@ -17,10 +24,20 @@ class ColorAndSize extends StatelessWidget {
             children: <Widget>[
               Text("COLOR"),
               SizedBox(width: kDefaultPaddin / 2),
-              for (var color in product.colors)
+              for (var i = 0; i < product.colors.length; i++)
                 ColorDot(
-                  color: color,
+                  color: colors[i],
                   isSelected: true, // You can set isSelected based on your logic
+                  onTap: 
+                    () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailsScreen(
+                        product:  product,
+                        img: paths[i],
+                      ),
+                    ),
+                  )
                 ),
             ],
           ),
@@ -47,33 +64,46 @@ class ColorAndSize extends StatelessWidget {
   }
 }
 
+
 class ColorDot extends StatelessWidget {
-  const ColorDot({super.key, required this.color, required this.isSelected});
+  const ColorDot({
+    super.key,
+    required this.color,
+    required this.isSelected,
+    required this.onTap
+    
+  });
 
   final Color color;
   final bool isSelected;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: kDefaultPaddin / 4,
-        right: kDefaultPaddin / 2,
-      ),
-      padding: EdgeInsets.all(2.5),
-      height: 24,
-      width: 24,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: isSelected ? color : Colors.transparent,
+    return GestureDetector(
+      onTap: onTap, // Define la acción que se realizará al tocar el ColorDot.
+      child: Container(
+        margin: EdgeInsets.only(
+          top: kDefaultPaddin / 4,
+          right: kDefaultPaddin / 2,
         ),
-      ),
-      child: DecoratedBox(
+        padding: EdgeInsets.all(2.5),
+        height: 24,
+        width: 24,
         decoration: BoxDecoration(
-          color: color,
           shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected ? color : Colors.transparent,
+          ),
+        ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
         ),
       ),
     );
   }
 }
+

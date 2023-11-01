@@ -10,17 +10,19 @@ import 'components/description.dart';
 import 'components/product_title_with_image.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key, required this.product});
+  const DetailsScreen({super.key, required this.product, this.img});
 
   final Product product;
+  final String? img;
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    //final Size size = MediaQuery.of(context).size;
     return Scaffold(
       // each product have a color
       //backgroundColor: Color(0xFA0F0707),
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white70,
         elevation: 0,
         leading: IconButton(
@@ -50,7 +52,7 @@ class DetailsScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: size.height,
+              //height: size.height,
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -68,7 +70,7 @@ class DetailsScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: <Widget>[
-                        ProductTitleWithImage(product: product),
+                        ProductTitleWithImage(product: product, img: img),
                         SizedBox(height: kDefaultPaddin),
                         ColorAndSize(product: product),
                         SizedBox(height: kDefaultPaddin / 2),

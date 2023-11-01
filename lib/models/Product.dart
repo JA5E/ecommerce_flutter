@@ -1,11 +1,74 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http; 
+
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+
+/*
+Future<void> _fetchData() async {
+  const apiUrl = 'https://moviles2-jase-default-rtdb.firebaseio.com/categories.json';
+
+  final response = await http.get(Uri.parse(apiUrl));
+  final data = json.decode(response.body);
+
+  List<Category> fetchedCategories = [];
+
+  for (var categoryData in data) {
+    List<Product> categoryProducts = [];
+    for (var productData in categoryData['products']) {
+      List<Color> productColors = [];
+      for (var color in productData['colors']) {
+        productColors.add(Color(int.parse(color.substring(1), radix: 16)));
+      }
+
+      Product product = Product(
+        id: productData['id'],
+        title: productData['title'],
+        price: productData['price'],
+        size: productData['size'],
+        description: productData['description'],
+        image: productData['image'],
+        colors: productColors,
+      );
+
+      categoryProducts.add(product);
+    }
+
+    Category category = Category(
+      title: categoryData['title'],
+      image: categoryData['image'],
+      products: categoryProducts,
+    );
+
+    fetchedCategories.add(category);
+  }
+
+  // Now, you can assign the fetched data to your existing 'categories' list.
+  categories = fetchedCategories;
+}
+*/
+
+class CategoriesProvider with ChangeNotifier {
+  List<Category> categories = [];
+
+  void updateCategories(List<Category> newCategories) {
+    categories = newCategories;
+    notifyListeners();
+  }
+}
+
+class ProductsProvider with ChangeNotifier {
+  List<Product> products = [];
+  void updateProducts(List<Product> newProdcuts) {
+    products = newProdcuts;
+    notifyListeners();
+  }
+
+}
 
 class Product {
   final String image, title, description;
   final int price, size, id;
-  final List<Color> colors;
+  final List<String> colors;
 
   Product(
       {required this.image,
@@ -20,15 +83,17 @@ class Product {
 
 class Category {
   final String image, title;
-  final List<Product> products;
+  //final List<Product> products;
 
   Category(
       {required this.image,
       required this.title,
-      required this.products,
+      //required this.products,
       });
 }
 
+
+/*
 List<Product> tennis_products = [
   Product(
       id: 1,
@@ -100,12 +165,12 @@ List<Product> clothes_products = [
 
 List<Category> categories = [
   Category(
-      title: "FW19",
+      title: "TENNIS",
       image: "assets/images/tennis.png",
       products: tennis_products,
   ),
   Category(
-      title: "TENNIS",
+      title: "CLOTHES",
       image: "assets/images/clothes.png",
       products: clothes_products,
   ),
@@ -115,3 +180,5 @@ List<Category> categories = [
 String dummyText =
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. When an unknown printer took a galley.";
 
+
+*/

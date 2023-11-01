@@ -1,11 +1,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:ecommerce_flutter/constants.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/home/components/categories.dart';
 
-void main() async {
-  runApp(MyApp());
+import 'package:ecommerce_flutter/models/Product.dart';
+
+
+
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (context) => ProductsProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

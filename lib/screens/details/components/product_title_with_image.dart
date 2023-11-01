@@ -4,11 +4,21 @@ import 'package:ecommerce_flutter/models/Product.dart';
 import '../../../constants.dart';
 
 class ProductTitleWithImage extends StatelessWidget {
-  const ProductTitleWithImage({super.key, required this.product});
-
+  const ProductTitleWithImage({super.key, required this.product, this.img});
+  
   final Product product;
+  final String? img;
+  
   @override
   Widget build(BuildContext context) {
+
+    final String imgP;
+    if(img==null){
+      imgP = product.image;
+    }else{
+      imgP = img!;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
       child: Row(
@@ -25,7 +35,7 @@ class ProductTitleWithImage extends StatelessWidget {
           Expanded(
             child: Container(
               child: Image.asset(
-                product.image,
+                imgP,
                 fit: BoxFit.fill,
               ),
             ),

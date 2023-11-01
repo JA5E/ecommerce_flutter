@@ -18,15 +18,28 @@ class ItemCategory extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(kDefaultPaddin),
+              width: double.infinity,
+              //padding: EdgeInsets.all(kDefaultPaddin),
               decoration: BoxDecoration(
                 color: Colors.white70,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Hero(
-                tag: "${category.title}",
-                child: Image.asset(category.image),
-              ),
+              //child: Hero(tag: "${category.title}",child: Image.asset(category.image, fit: BoxFit.cover,),),
+              child: Stack(
+                  children: [
+                    Image.asset(category.image, fit: BoxFit.cover),
+                    Center(
+                      child: Text(
+                        "${category.title}", // Replace with the desired text
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ),
           ),
         ],
