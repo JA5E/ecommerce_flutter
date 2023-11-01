@@ -29,7 +29,7 @@ class ColorAndSize extends StatelessWidget {
                   color: colors[i],
                   isSelected: true, // You can set isSelected based on your logic
                   onTap: 
-                    () => Navigator.push(
+                    () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailsScreen(
